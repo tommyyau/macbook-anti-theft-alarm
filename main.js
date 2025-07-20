@@ -243,21 +243,14 @@ function stopLidMonitoring() {
     lidMonitorInterval = null;
     console.log('🛑 Stopped lid monitoring');
     
-    // Re-enable system sleep when disarmed
+    // Re-enable system sleep when disarmed (non-blocking, no additional password)
     if (process.platform === 'darwin') {
-      // Use the existing requestDisarmPermission to get admin rights, then re-enable sleep
-      const options = {
-        name: 'MacBook AntiTheft Alarm',
-      };
-      
-      sudo.exec('pmset -a disablesleep 0', options, (error) => {
+      // Just try to re-enable sleep without sudo (will work if we already have admin rights)
+      exec('pmset -a disablesleep 0', (error) => {
         if (!error) {
-          console.log('✅ Re-enabled system sleep with admin privileges');
+          console.log('✅ Re-enabled system sleep');
         } else {
-          // Try without sudo as fallback
-          exec('pmset -a disablesleep 0', (error) => {
-            if (!error) console.log('✅ Re-enabled system sleep (no sudo)');
-          });
+          console.log('⚠️ Could not re-enable system sleep (will reset on restart)');
         }
       });
       
