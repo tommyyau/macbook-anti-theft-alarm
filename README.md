@@ -1,6 +1,6 @@
 # MacShieldAlarm
 
-A simple but effective anti-theft alarm system for MacBooks that detects when someone tries to close your laptop lid and triggers a loud alarm.
+A simple but effective anti-theft alarm system for MacBooks with MacShield protection that detects when someone tries to close your laptop lid and triggers a loud alarm.
 
 ## 🛡️ Features
 
@@ -16,7 +16,12 @@ A simple but effective anti-theft alarm system for MacBooks that detects when so
 
 ### Option 1: Download DMG (Recommended)
 
-**From Releases:**
+**Latest Release:**
+1. Download the latest DMG: **[MacShieldAlarm-1.0.0-arm64.dmg](MacShieldAlarm-1.0.0-arm64.dmg)** (96.8 MB)
+2. Follow the [Installation Guide](INSTALLATION.md) to handle the security warning
+3. Drag the app to your Applications folder
+
+**From GitHub Releases:**
 1. Go to the [Releases](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) page
 2. Download the latest `.dmg` file
 3. Follow the [Installation Guide](INSTALLATION.md) to handle the security warning
@@ -102,4 +107,13 @@ MIT License - see LICENSE file for details
 
 ## 🔄 Updates
 
-The app will automatically check for updates. New releases will be available on the [GitHub Releases](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) page. 
+The app will automatically check for updates. New releases will be available on the [GitHub Releases](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) page.
+
+## 📦 Current Release
+
+**MacShieldAlarm v1.0.0**
+- ✅ Fixed quit functionality with proper app lifecycle management
+- ✅ Updated icon design with rounded corners and MacShield branding
+- ✅ Enhanced security with admin password protection
+- ✅ Improved UI/UX with better tray integration
+- ✅ Renamed to MacShieldAlarm for brand consistency 

@@ -4,7 +4,7 @@
 
 ### Option 1: Install from GitHub Release (Recommended)
 
-1. **Download the DMG**: Go to the [Releases page](https://github.com/yourusername/macbook-anti-theft-alarm/releases) and download the latest `.dmg` file.
+1. **Download the DMG**: Go to the [Releases page](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) and download the latest `.dmg` file, or download directly: **[MacShieldAlarm-1.0.0-arm64.dmg](MacShieldAlarm-1.0.0-arm64.dmg)** (96.8 MB)
 
 2. **Handle "Corrupt" DMG Warning**: When you try to open the DMG, macOS may show a warning that the app is "corrupt" or "damaged". This is normal for unsigned apps. Here's how to fix it:
 
@@ -28,7 +28,7 @@ If you want to build the app yourself:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/macbook-anti-theft-alarm.git
+git clone https://github.com/tommyyau/macbook-anti-theft-alarm.git
 cd macbook-anti-theft-alarm
 
 # Install dependencies
@@ -46,7 +46,7 @@ For testing without building:
 
 ```bash
 # Clone and install dependencies
-git clone https://github.com/yourusername/macbook-anti-theft-alarm.git
+git clone https://github.com/tommyyau/macbook-anti-theft-alarm.git
 cd macbook-anti-theft-alarm
 npm install
 
@@ -88,6 +88,6 @@ Grant these permissions when prompted.
 ## Support
 
 If you continue to have issues:
-1. Check the [Issues page](https://github.com/yourusername/macbook-anti-theft-alarm/issues)
+1. Check the [Issues page](https://github.com/tommyyau/macbook-anti-theft-alarm/issues)
 2. Create a new issue with details about your problem
 3. Include your macOS version and any error messages 
