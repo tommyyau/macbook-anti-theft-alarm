@@ -50,7 +50,12 @@ function setupEventListeners() {
     stopAlarmBtn.addEventListener('click', stopAlarm);
     
     // Volume slider event listener
-    volumeSlider.addEventListener('input', updateVolume);
+    volumeSlider.addEventListener('input', (event) => {
+        updateVolume();
+        // Also update track immediately for smooth visual feedback
+        const value = parseInt(event.target.value);
+        updateSliderTrack(value);
+    });
     volumeSlider.addEventListener('change', saveVolume);
     
     // Listen for alarm triggers from main process
@@ -169,16 +174,24 @@ function updateVolume() {
 function updateSliderTrack(volumePercent) {
     const slider = document.getElementById('volume-slider');
     if (slider) {
-        // Ensure the track ends exactly at the thumb position
-        // Use a more precise calculation to avoid the blue bar extending beyond
+        // Calculate the exact position where the track should end
+        // The track should end at the center of the thumb, not beyond it
         const trackEnd = Math.max(0, Math.min(volumePercent, 100));
         
-        // Create a sharp cutoff at the exact position with no overlap
-        const gradient = `linear-gradient(to right, #3498db 0%, #3498db ${trackEnd}%, #ecf0f1 ${trackEnd}%, #ecf0f1 100%)`;
+        // Adjust the end position to account for the thumb size
+        // Subtract a small amount to ensure the blue bar doesn't extend beyond the thumb
+        const adjustedEnd = Math.max(0, trackEnd - 2);
+        
+        // Create a gradient that stops exactly at the thumb position
+        // Use a sharp cutoff with no overlap
+        const gradient = `linear-gradient(to right, #3498db 0%, #3498db ${adjustedEnd}%, #ecf0f1 ${adjustedEnd}%, #ecf0f1 100%)`;
         slider.style.background = gradient;
         
-        console.log('Track updated to:', trackEnd + '%');
-        console.log('Gradient applied:', gradient);
+        // Ensure the slider value matches
+        slider.value = volumePercent;
+        
+        console.log('Track updated to:', adjustedEnd + '% (adjusted from ' + trackEnd + '%)');
+        console.log('Slider value confirmed:', slider.value);
     } else {
         console.error('Slider not found for track update');
     }
@@ -202,12 +215,21 @@ function loadVolume() {
     // Always start with 30% for now
     const volumePercent = 30;
     
-    // Force set the slider value
+    // Force set the slider value and ensure it's properly initialized
     if (volumeSlider) {
+        // Set the slider value first
         volumeSlider.value = volumePercent;
-        currentVolume = volumePercent / 100;
+        
+        // Update the display
         volumeValue.textContent = volumePercent + '%';
-        updateSliderTrack(volumePercent);
+        
+        // Update the current volume for audio
+        currentVolume = volumePercent / 100;
+        
+        // Update the track with a slight delay to ensure DOM is ready
+        setTimeout(() => {
+            updateSliderTrack(volumePercent);
+        }, 50);
         
         console.log('Volume initialized to:', volumePercent + '%');
         console.log('Slider value set to:', volumeSlider.value);
