@@ -34,7 +34,7 @@
   },
   "build": {
     "appId": "com.tommyyau.macbook-anti-theft-alarm",
-    "productName": "MacBook Anti-Theft Alarm",
+    "productName": "Anti-Theft Alarm",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -67,7 +67,7 @@
       "identity": null
     },
     "dmg": {
-      "title": "MacBook Anti-Theft Alarm",
+      "title": "Anti-Theft Alarm",
       "window": {
         "width": 540,
         "height": 380

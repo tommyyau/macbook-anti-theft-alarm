@@ -1,6 +1,6 @@
 # Installation Guide
 
-## Downloading and Installing the MacBook Anti-Theft Alarm
+## Downloading and Installing the Anti-Theft Alarm
 
 ### Option 1: Install from GitHub Release (Recommended)
 

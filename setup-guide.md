@@ -1,4 +1,4 @@
-# MacBook Anti-Theft Alarm
+# Anti-Theft Alarm
 
 A simple Electron app that helps protect your MacBook in public spaces by triggering an alarm when someone tries to close the lid while you're away.
 

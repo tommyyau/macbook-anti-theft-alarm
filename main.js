@@ -115,7 +115,7 @@ function createTray() {
   ]);
   
   tray.setContextMenu(contextMenu);
-  tray.setToolTip('MacBook Anti-Theft Alarm');
+  tray.setToolTip('Anti-Theft Alarm');
   
   tray.on('click', () => {
     mainWindow.show();
@@ -382,7 +382,7 @@ app.whenReady().then(() => {
   // Handle Cmd+Q (macOS) and Ctrl+Q (Windows/Linux) properly
   const template = [
     {
-      label: 'MacBook Anti-Theft Alarm',
+      label: 'Anti-Theft Alarm',
       submenu: [
         {
           label: 'Quit',

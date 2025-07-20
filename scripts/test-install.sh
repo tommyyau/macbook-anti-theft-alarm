@@ -1,13 +1,13 @@
 #!/bin/bash
 
-echo "🔍 MacBook Anti-Theft Alarm - Installation Test"
+echo "🔍 Anti-Theft Alarm - Installation Test"
 echo "================================================"
 echo ""
 
 # Check if DMG exists
-if [ -f "dist/MacBook Anti-Theft Alarm-1.0.0-arm64.dmg" ]; then
-    echo "✅ DMG file found: dist/MacBook Anti-Theft Alarm-1.0.0-arm64.dmg"
-    echo "📏 File size: $(du -h "dist/MacBook Anti-Theft Alarm-1.0.0-arm64.dmg" | cut -f1)"
+if [ -f "dist/Anti-Theft Alarm-1.0.0-arm64.dmg" ]; then
+  echo "✅ DMG file found: dist/Anti-Theft Alarm-1.0.0-arm64.dmg"
+  echo "📏 File size: $(du -h "dist/Anti-Theft Alarm-1.0.0-arm64.dmg" | cut -f1)"
     echo ""
     
     echo "📋 Installation Instructions:"
