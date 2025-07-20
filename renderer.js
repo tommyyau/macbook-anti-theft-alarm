@@ -161,7 +161,10 @@ function updateVolume() {
 function updateSliderTrack(volumePercent) {
     const slider = document.getElementById('volume-slider');
     if (slider) {
-        slider.style.background = `linear-gradient(to right, #3498db 0%, #3498db ${volumePercent}%, #ecf0f1 ${volumePercent}%, #ecf0f1 100%)`;
+        // Calculate the exact position where the track should end
+        // The track should end exactly at the thumb position
+        const trackEnd = Math.max(volumePercent, 0);
+        slider.style.background = `linear-gradient(to right, #3498db 0%, #3498db ${trackEnd}%, #ecf0f1 ${trackEnd}%, #ecf0f1 100%)`;
     }
 }
 
@@ -185,7 +188,10 @@ function loadVolume() {
         volumeValue.textContent = volumePercent + '%';
         updateSliderTrack(volumePercent);
     } else {
-        // Set default track color for 30%
+        // Set default to 30%
+        volumeSlider.value = 30;
+        currentVolume = 0.3;
+        volumeValue.textContent = '30%';
         updateSliderTrack(30);
     }
 }

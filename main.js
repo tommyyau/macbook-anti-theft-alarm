@@ -18,10 +18,10 @@ if (process.env.NODE_ENV === 'development') {
 function createWindow() {
   // Create the browser window
   mainWindow = new BrowserWindow({
-    width: 500,
-    height: 750,
-    minWidth: 450,
-    minHeight: 600,
+    width: 520,
+    height: 800,
+    minWidth: 480,
+    minHeight: 650,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -63,40 +63,15 @@ function createWindow() {
 function autoResizeWindow() {
   if (!mainWindow) return;
   
-  // Get the content size with a simpler approach
-  mainWindow.webContents.executeJavaScript(`
-    const container = document.querySelector('.container');
-    if (container) {
-      const rect = container.getBoundingClientRect();
-      const computedStyle = window.getComputedStyle(container);
-      const height = rect.height + 
-        parseInt(computedStyle.marginTop) + 
-        parseInt(computedStyle.marginBottom) + 100; // Extra buffer
-      const width = rect.width + 
-        parseInt(computedStyle.marginLeft) + 
-        parseInt(computedStyle.marginRight) + 50; // Extra buffer
-      { height: height, width: width };
-    } else {
-      { height: 750, width: 500 }; // Fallback size
-    }
-  `).then((size) => {
-    if (size && size.height && size.width) {
-      // Ensure minimum size with more generous padding
-      const newHeight = Math.max(size.height, 700);
-      const newWidth = Math.max(size.width, 480);
-      
-      // Resize window to fit content
-      mainWindow.setSize(newWidth, newHeight);
-      
-      // Center the window on screen
-      mainWindow.center();
-    }
-  }).catch((error) => {
-    console.log('Auto-resize failed, using default size:', error);
-    // Fallback to a larger default size
-    mainWindow.setSize(500, 750);
-    mainWindow.center();
-  });
+  // Use a much simpler approach - just set a larger default size
+  // since the auto-resize JavaScript keeps failing
+  const newWidth = 520;
+  const newHeight = 800;
+  
+  mainWindow.setSize(newWidth, newHeight);
+  mainWindow.center();
+  
+  console.log(`Window resized to ${newWidth}x${newHeight}`);
 }
 
 function createTray() {
