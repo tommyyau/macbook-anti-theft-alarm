@@ -325,18 +325,18 @@ async function disarmAlarm() {
     }
 }
 
-// Stop the alarm (when triggered)
+// Stop the alarm (when triggered) - automatically disarms after stopping
 async function stopAlarm() {
     try {
         showNotification('🔐 Admin password required to stop alarm...', 'warning');
         // The alarm keeps playing while waiting for password!
         const result = await ipcRenderer.invoke('stop-alarm');
         if (result) {
-            // Only stop the sound AFTER successful authentication
+            // Stop the sound AFTER successful authentication
             stopAlarmSound();
             hideAlarmTriggered();
             await updateUI();
-            showNotification('🛑 Alarm Stopped', 'success');
+            showNotification('🛑 Alarm Stopped & Disarmed', 'success');
         } else {
             showNotification('❌ Admin password required - alarm continues!', 'error');
         }

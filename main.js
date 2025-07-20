@@ -439,16 +439,16 @@ ipcMain.handle('stop-alarm', async () => {
     // Request admin permission
     await requestDisarmPermission();
     
+    // Stop the alarm AND disarm it completely
     alarmTriggered = false;
+    isAlarmArmed = false; // Automatically disarm
     mainWindow.setAlwaysOnTop(false); // Remove always-on-top
+    stopLidMonitoring(); // Stop lid monitoring
     updateTray();
-    console.log('✅ Alarm STOPPED with admin permission');
+    console.log('✅ Alarm STOPPED & DISARMED with admin permission');
     
     // Send success event
     mainWindow.webContents.send('alarm-stopped-success');
-    
-    // Note: We don't stop lid monitoring here - alarm remains armed
-    // User must explicitly disarm to stop monitoring
     
     return true;
   } catch (error) {
