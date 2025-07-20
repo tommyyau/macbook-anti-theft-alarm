@@ -7,6 +7,7 @@
     "start": "electron .",
     "build": "electron-builder",
     "build-mac": "electron-builder --mac",
+    "build-dmg": "electron-builder --mac dmg",
     "build-win": "electron-builder --win",
     "build-linux": "electron-builder --linux"
   },
@@ -21,7 +22,7 @@
     "sudo-prompt": "^9.2.1"
   },
   "build": {
-    "appId": "com.yourname.macbook-anti-theft",
+    "appId": "com.tommyyau.macbook-anti-theft-alarm",
     "productName": "MacBook Anti-Theft Alarm",
     "directories": {
       "output": "dist"
@@ -31,17 +32,40 @@
       "renderer.js",
       "index.html",
       "styles.css",
-      "alarm.mp3"
+      "package.json",
+      "setup-guide.md"
     ],
     "mac": {
-      "target": "dmg",
-      "category": "public.app-category.utilities"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.utilities",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
     },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage"
+    "dmg": {
+      "title": "MacBook Anti-Theft Alarm",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     }
   }
 }
