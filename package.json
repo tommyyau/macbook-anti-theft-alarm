@@ -8,13 +8,24 @@
     "build": "electron-builder",
     "build-mac": "electron-builder --mac",
     "build-dmg": "electron-builder --mac dmg",
+    "build-dmg-unsigned": "electron-builder --mac dmg --publish never",
     "build-win": "electron-builder --win",
-    "build-linux": "electron-builder --linux"
+    "build-linux": "electron-builder --linux",
+    "dev-build": "electron-builder --mac dmg --publish never",
+    "test-install": "./scripts/test-install.sh",
+    "setup-icons": "./scripts/setup-icons.sh"
   },
-  "keywords": ["electron", "alarm", "anti-theft", "macbook", "security"],
+  "keywords": [
+    "electron",
+    "alarm",
+    "anti-theft",
+    "macbook",
+    "security"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
+    "@electron/notarize": "^2.5.0",
     "electron": "^28.0.0",
     "electron-builder": "^24.0.0"
   },
@@ -25,7 +36,8 @@
     "appId": "com.tommyyau.macbook-anti-theft-alarm",
     "productName": "MacBook Anti-Theft Alarm",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "build"
     },
     "files": [
       "main.js",
@@ -33,20 +45,26 @@
       "index.html",
       "styles.css",
       "package.json",
-      "setup-guide.md"
+      "setup-guide.md",
+      "assets/icons/*"
     ],
+    "icon": "build/icon.icns",
     "mac": {
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "category": "public.app-category.utilities",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "identity": null
     },
     "dmg": {
       "title": "MacBook Anti-Theft Alarm",
@@ -66,6 +84,7 @@
           "path": "/Applications"
         }
       ]
-    }
+    },
+    "afterSign": "scripts/notarize.js"
   }
 }

@@ -106,16 +106,12 @@ function setupEventListeners() {
                 showNotification('🔒 Admin password required to close app!', 'error');
                 return;
             }
-            if (event.key === 'q' && event.metaKey) { // Cmd+Q
-                event.preventDefault();
-                showNotification('🔒 Admin password required to quit app!', 'error');
-                return;
-            }
             if (event.key === 'w' && event.metaKey) { // Cmd+W
                 event.preventDefault();
                 showNotification('🔒 Admin password required to close window!', 'error');
                 return;
             }
+            // Note: Cmd+Q is handled by the main process menu, so we don't need to block it here
         }
         
         if (event.key === 'Escape') {

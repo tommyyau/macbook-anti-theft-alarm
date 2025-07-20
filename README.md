@@ -12,17 +12,15 @@ A simple but effective anti-theft alarm system for MacBooks that detects when so
 
 ## 📦 Installation
 
+**⚠️ Important**: Due to macOS security features, you may see a "corrupt" or "damaged" warning when installing. This is normal for unsigned apps. See the [Installation Guide](INSTALLATION.md) for detailed instructions on how to handle this.
+
 ### Option 1: Download DMG (Recommended)
 
-**Direct Download:**
-- [Download DMG File](https://github.com/tommyyau/macbook-anti-theft-alarm/raw/main/MacBook%20Anti-Theft%20Alarm-1.0.0-arm64.dmg) (89MB)
-
-**Or from Releases:**
+**From Releases:**
 1. Go to the [Releases](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) page
-2. Download the latest `MacBook Anti-Theft Alarm-1.0.0-arm64.dmg` file
-3. Double-click the DMG file to mount it
+2. Download the latest `.dmg` file
+3. Follow the [Installation Guide](INSTALLATION.md) to handle the security warning
 4. Drag the app to your Applications folder
-5. Eject the DMG
 
 ### Option 2: Build from Source
 
@@ -38,7 +36,7 @@ npm install
 npm start
 
 # Build DMG (optional)
-npm run build-dmg
+npm run dev-build
 ```
 
 ## 🚀 Usage

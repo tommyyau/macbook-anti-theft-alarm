@@ -47,7 +47,7 @@ function createWindow() {
     if (isAlarmArmed && !alarmTriggered) {
       event.preventDefault();
       triggerAlarm('Window closed while alarm was armed!');
-    } else if (!app.isQuiting) {
+    } else if (!app.isQuitting) {
       event.preventDefault();
       mainWindow.hide();
     }
@@ -75,8 +75,21 @@ function autoResizeWindow() {
 }
 
 function createTray() {
-  // Create tray icon (using a simple emoji for now)
-  const trayIcon = nativeImage.createFromPath(path.join(__dirname, 'tray-icon.png')).resize({ width: 16, height: 16 });
+  // Create tray icon
+  const trayIconPath = path.join(__dirname, 'assets', 'icons', 'tray-icon.png');
+  const fallbackIconPath = path.join(__dirname, 'assets', 'icons', 'icon.png');
+  
+  let trayIcon;
+  if (require('fs').existsSync(trayIconPath)) {
+    trayIcon = nativeImage.createFromPath(trayIconPath);
+  } else if (require('fs').existsSync(fallbackIconPath)) {
+    trayIcon = nativeImage.createFromPath(fallbackIconPath);
+  } else {
+    // Fallback to a simple colored circle if no icon found
+    trayIcon = nativeImage.createFromDataURL('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
+  }
+  
+  trayIcon = trayIcon.resize({ width: 16, height: 16 });
   tray = new Tray(trayIcon);
   
   const contextMenu = Menu.buildFromTemplate([
@@ -95,7 +108,7 @@ function createTray() {
     {
       label: 'Quit',
       click: () => {
-        app.isQuiting = true;
+        app.isQuitting = true;
         app.quit();
       }
     }
@@ -308,7 +321,7 @@ function triggerAlarm(reason) {
 
 function updateTray() {
   if (tray) {
-    const contextMenu = Menu.buildFromTemplate([
+    const menuItems = [
       {
         label: 'Show App',
         click: () => {
@@ -319,16 +332,37 @@ function updateTray() {
         label: alarmTriggered ? 'Status: ALARM TRIGGERED!' : isAlarmArmed ? 'Status: ARMED' : 'Status: Disarmed',
         enabled: false
       },
-      { type: 'separator' },
-      {
+      { type: 'separator' }
+    ];
+    
+    // Add different quit options based on alarm state
+    if (alarmTriggered) {
+      // When alarm is triggered, add a force quit option
+      menuItems.push({
+        label: 'Force Quit (Admin Required)',
+        click: async () => {
+          try {
+            // Request admin permission to force quit
+            await requestDisarmPermission();
+            app.isQuitting = true;
+            app.quit();
+          } catch (error) {
+            console.log('❌ Admin permission denied for force quit');
+          }
+        }
+      });
+    } else {
+      // Normal quit option
+      menuItems.push({
         label: 'Quit',
         click: () => {
-          app.isQuiting = true;
+          app.isQuitting = true;
           app.quit();
         }
-      }
-    ]);
+      });
+    }
     
+    const contextMenu = Menu.buildFromTemplate(menuItems);
     tray.setContextMenu(contextMenu);
   }
 }
@@ -344,11 +378,62 @@ app.whenReady().then(() => {
       triggerAlarm('System suspended (backup detection)!');
     }
   });
+  
+  // Handle Cmd+Q (macOS) and Ctrl+Q (Windows/Linux) properly
+  const template = [
+    {
+      label: 'MacBook Anti-Theft Alarm',
+      submenu: [
+        {
+          label: 'Quit',
+          accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
+          click: () => {
+            app.isQuitting = true;
+            app.quit();
+          }
+        }
+      ]
+    }
+  ];
+  
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 });
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+// Handle app quit properly
+app.on('before-quit', (event) => {
+  // If alarm is armed and not triggered, prevent quit and trigger alarm
+  if (isAlarmArmed && !alarmTriggered) {
+    event.preventDefault();
+    triggerAlarm('App quit attempted while alarm was armed!');
+    return;
+  }
+  
+  // Set the quitting flag to prevent window close event from hiding the window
+  app.isQuitting = true;
+  
+  // Clean up resources
+  if (lidMonitorInterval) {
+    clearInterval(lidMonitorInterval);
+    lidMonitorInterval = null;
+  }
+  
+  // Re-enable system sleep when quitting
+  if (process.platform === 'darwin') {
+    exec('pmset -a disablesleep 0', () => {});
+    exec('pkill caffeinate', () => {});
+  }
+  
+  // Remove tray
+  if (tray) {
+    tray.destroy();
+    tray = null;
   }
 });
 
