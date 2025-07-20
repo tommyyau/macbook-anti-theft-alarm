@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacBook Anti-Theft Alarm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔒 MacBook Anti-Theft Alarm</h1>
+            <p class="subtitle">Protect your device in public spaces</p>
+        </header>
+
+        <main>
+            <div class="status-section">
+                <div id="status-indicator" class="status-indicator disarmed">
+                    <div class="status-icon">🔓</div>
+                    <div class="status-text">
+                        <h2 id="status-title">Disarmed</h2>
+                        <p id="status-description">Your MacBook is not protected</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <button id="arm-btn" class="btn btn-primary">
+                    🛡️ Arm Alarm
+                </button>
+                <button id="disarm-btn" class="btn btn-secondary" disabled>
+                    🔓 Disarm Alarm
+                </button>
+                <button id="stop-alarm-btn" class="btn btn-danger" style="display: none;">
+                    🛑 Stop Alarm
+                </button>
+            </div>
+
+            <div class="instructions">
+                <h3>How it works:</h3>
+                <ol>
+                    <li><strong>Arm the alarm</strong> - you will be asked for your admin password to prevent system sleep</li>
+                    <li><strong>Close/minimize the app</strong> to system tray (it keeps running)</li>
+                    <li>If someone <strong>closes the lid</strong> or moves your laptop, the alarm triggers immediately</li>
+                    <li><strong>Return and disarm</strong> - requires admin password again to ensure security</li>
+                </ol>
+                <div class="admin-notice">
+                    <strong>🔐 Security:</strong> This app requires admin password to both arm AND disarm the alarm. This prevents thieves from simply clicking "Stop" to disable protection.
+                </div>
+            </div>
+
+            <div class="alarm-section" id="alarm-section" style="display: none;">
+                <div class="alarm-alert">
+                    <h2>🚨 ALARM TRIGGERED!</h2>
+                    <p id="alarm-reason">Someone attempted to close your MacBook!</p>
+                    <div class="alarm-sound-indicator">
+                        <div class="sound-wave"></div>
+                        <div class="sound-wave"></div>
+                        <div class="sound-wave"></div>
+                    </div>
+                    <div class="security-notice">
+                        🔐 Click "Stop Alarm" and enter admin password
+                    </div>
+                    <div class="alarm-instructions">
+                        Press ESC or click the red "Stop Alarm" button below, then enter your macOS admin password to stop the alarm.
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p class="version">v1.0.0 | Made with Electron</p>
+        </footer>
+    </div>
+
+    <!-- Hidden audio element for alarm sound -->
+    <audio id="alarm-audio" preload="auto" loop>
+        <source src="alarm.mp3" type="audio/mpeg">
+        <!-- Fallback to generated audio if no MP3 file -->
+    </audio>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
