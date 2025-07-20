@@ -84,18 +84,11 @@ function setupEventListeners() {
         showNotification('🔐 Enter your admin password to continue...', 'info');
     });
     
-    // Removed the hide/restore alarm handlers - alarm should keep playing!
-    
+    // Handle alarm stopped/disarmed events
     ipcRenderer.on('alarm-stopped-success', () => {
         hideAlarmTriggered();
         updateUI();
-        showNotification('✅ Alarm stopped successfully', 'success');
-    });
-    
-    ipcRenderer.on('alarm-disarmed-success', () => {
-        hideAlarmTriggered();
-        updateUI();
-        showNotification('✅ Alarm disarmed successfully', 'success');
+        showNotification('✅ Alarm stopped and disarmed successfully', 'success');
     });
     
     // Handle keyboard shortcuts

@@ -447,7 +447,7 @@ ipcMain.handle('stop-alarm', async () => {
     updateTray();
     console.log('✅ Alarm STOPPED & DISARMED with admin permission');
     
-    // Send success event
+    // Send success event (only this one, no separate disarm event)
     mainWindow.webContents.send('alarm-stopped-success');
     
     return true;
