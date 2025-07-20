@@ -7,6 +7,7 @@ const statusDescription = document.getElementById('status-description');
 const armBtn = document.getElementById('arm-btn');
 const disarmBtn = document.getElementById('disarm-btn');
 const stopAlarmBtn = document.getElementById('stop-alarm-btn');
+const stopAlarmButton = document.getElementById('stop-alarm-button');
 const alarmSection = document.getElementById('alarm-section');
 const alarmReason = document.getElementById('alarm-reason');
 const alarmAudio = document.getElementById('alarm-audio');
@@ -48,6 +49,7 @@ function setupEventListeners() {
     armBtn.addEventListener('click', armAlarm);
     disarmBtn.addEventListener('click', disarmAlarm);
     stopAlarmBtn.addEventListener('click', stopAlarm);
+    stopAlarmButton.addEventListener('click', stopAlarm);
     
     // Volume slider event listener
     volumeSlider.addEventListener('input', (event) => {

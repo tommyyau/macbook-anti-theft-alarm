@@ -169,6 +169,23 @@ main {
     background: #c0392b;
 }
 
+.btn-large {
+    font-size: 18px;
+    padding: 15px 30px;
+    margin: 20px 0;
+    min-width: 200px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-large:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
 @keyframes pulse-red {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.8; }
