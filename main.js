@@ -18,15 +18,18 @@ if (process.env.NODE_ENV === 'development') {
 function createWindow() {
   // Create the browser window
   mainWindow = new BrowserWindow({
-    width: 480,
-    height: 650,
+    width: 500,
+    height: 750,
+    minWidth: 450,
+    minHeight: 600,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
     },
-    resizable: false,
+    resizable: true,
     titleBarStyle: 'hiddenInset',
-    show: false
+    show: false,
+    useContentSize: true
   });
 
   // Load the app
@@ -35,6 +38,8 @@ function createWindow() {
   // Show window when ready
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    // Auto-resize window to fit content
+    autoResizeWindow();
   });
 
   // Handle window close - minimize to tray instead
@@ -46,6 +51,51 @@ function createWindow() {
       event.preventDefault();
       mainWindow.hide();
     }
+  });
+  
+  // Handle resize requests from renderer
+  ipcMain.handle('resize-window', () => {
+    autoResizeWindow();
+  });
+}
+
+// Auto-resize window to fit content
+function autoResizeWindow() {
+  if (!mainWindow) return;
+  
+  // Get the content size
+  mainWindow.webContents.executeJavaScript(`
+    const body = document.body;
+    const html = document.documentElement;
+    const height = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+    const width = Math.max(
+      body.scrollWidth,
+      body.offsetWidth,
+      html.clientWidth,
+      html.scrollWidth,
+      html.offsetWidth
+    );
+    { height: height + 50, width: width + 50 }; // Add padding
+  `).then((size) => {
+    if (size && size.height && size.width) {
+      // Ensure minimum size
+      const newHeight = Math.max(size.height, 600);
+      const newWidth = Math.max(size.width, 450);
+      
+      // Resize window to fit content
+      mainWindow.setSize(newWidth, newHeight);
+      
+      // Center the window on screen
+      mainWindow.center();
+    }
+  }).catch((error) => {
+    console.log('Auto-resize failed:', error);
   });
 }
 

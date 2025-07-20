@@ -28,6 +28,11 @@ async function init() {
     setupEventListeners();
     setupAudio();
     loadVolume(); // Load saved volume setting
+    
+    // Request window resize to fit new content
+    setTimeout(() => {
+        ipcRenderer.invoke('resize-window');
+    }, 100);
 }
 
 // Set up event listeners
@@ -154,6 +159,9 @@ function saveVolume() {
     const volumePercent = parseInt(volumeSlider.value);
     localStorage.setItem('alarmVolume', volumePercent.toString());
     showNotification(`🔊 Volume set to ${volumePercent}%`, 'info');
+    
+    // Request window resize in case layout changed
+    ipcRenderer.invoke('resize-window');
 }
 
 // Load volume setting from localStorage
