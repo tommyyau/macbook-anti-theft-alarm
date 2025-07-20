@@ -1,6 +1,6 @@
 # Installation Guide
 
-## Downloading and Installing the Anti-Theft Alarm
+## Downloading and Installing MacShieldAlarm
 
 ### Option 1: Install from GitHub Release (Recommended)
 

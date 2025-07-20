@@ -1,7 +1,7 @@
 {
   "name": "macbook-anti-theft-alarm",
   "version": "1.0.0",
-  "description": "Simple anti-theft alarm system for MacBooks",
+  "description": "Simple anti-theft alarm system for MacBooks with MacShield protection",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -34,7 +34,7 @@
   },
   "build": {
     "appId": "com.tommyyau.macbook-anti-theft-alarm",
-    "productName": "Anti-Theft Alarm",
+    "productName": "MacShieldAlarm",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -67,7 +67,7 @@
       "identity": null
     },
     "dmg": {
-      "title": "Anti-Theft Alarm",
+      "title": "MacShieldAlarm",
       "window": {
         "width": 540,
         "height": 380

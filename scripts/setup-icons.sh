@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🎨 Anti-Theft Alarm - Icon Setup"
+echo "🎨 MacShieldAlarm - Icon Setup"
 echo "========================================"
 echo ""
 

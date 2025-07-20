@@ -1,4 +1,4 @@
-# Anti-Theft Alarm
+# MacShieldAlarm
 
 A simple but effective anti-theft alarm system for MacBooks that detects when someone tries to close your laptop lid and triggers a loud alarm.
 
