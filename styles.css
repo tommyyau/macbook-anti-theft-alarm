@@ -170,20 +170,27 @@ main {
 }
 
 .btn-large {
-    font-size: 18px;
-    padding: 15px 30px;
-    margin: 20px 0;
-    min-width: 200px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    font-size: 20px;
+    padding: 18px 40px;
+    margin: 25px auto;
+    min-width: 250px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 4px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    display: block;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: linear-gradient(145deg, #e74c3c, #c0392b);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .btn-large:hover:not(:disabled) {
-    transform: scale(1.08);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+    background: linear-gradient(145deg, #c0392b, #a93226);
 }
 
 @keyframes pulse-red {
@@ -346,6 +353,12 @@ main {
 .alarm-alert {
     text-align: center;
     color: white;
+    max-width: 500px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
 .alarm-alert h2 {
