@@ -29,6 +29,14 @@ async function init() {
     setupAudio();
     loadVolume(); // Load saved volume setting
     
+    // Debug: Check if volume slider exists
+    const slider = document.getElementById('volume-slider');
+    console.log('Volume slider found:', !!slider);
+    if (slider) {
+        console.log('Slider value:', slider.value);
+        console.log('Slider min/max:', slider.min, '/', slider.max);
+    }
+    
     // Request window resize to fit new content
     setTimeout(() => {
         ipcRenderer.invoke('resize-window');
@@ -161,10 +169,18 @@ function updateVolume() {
 function updateSliderTrack(volumePercent) {
     const slider = document.getElementById('volume-slider');
     if (slider) {
-        // Calculate the exact position where the track should end
-        // The track should end exactly at the thumb position
-        const trackEnd = Math.max(volumePercent, 0);
-        slider.style.background = `linear-gradient(to right, #3498db 0%, #3498db ${trackEnd}%, #ecf0f1 ${trackEnd}%, #ecf0f1 100%)`;
+        // Ensure the track ends exactly at the thumb position
+        // Use a more precise calculation to avoid the blue bar extending beyond
+        const trackEnd = Math.max(0, Math.min(volumePercent, 100));
+        
+        // Create a sharp cutoff at the exact position with no overlap
+        const gradient = `linear-gradient(to right, #3498db 0%, #3498db ${trackEnd}%, #ecf0f1 ${trackEnd}%, #ecf0f1 100%)`;
+        slider.style.background = gradient;
+        
+        console.log('Track updated to:', trackEnd + '%');
+        console.log('Gradient applied:', gradient);
+    } else {
+        console.error('Slider not found for track update');
     }
 }
 
@@ -180,19 +196,23 @@ function saveVolume() {
 
 // Load volume setting from localStorage
 function loadVolume() {
-    const savedVolume = localStorage.getItem('alarmVolume');
-    if (savedVolume) {
-        const volumePercent = parseInt(savedVolume);
+    // Clear any existing localStorage to ensure clean start
+    localStorage.removeItem('alarmVolume');
+    
+    // Always start with 30% for now
+    const volumePercent = 30;
+    
+    // Force set the slider value
+    if (volumeSlider) {
         volumeSlider.value = volumePercent;
         currentVolume = volumePercent / 100;
         volumeValue.textContent = volumePercent + '%';
         updateSliderTrack(volumePercent);
+        
+        console.log('Volume initialized to:', volumePercent + '%');
+        console.log('Slider value set to:', volumeSlider.value);
     } else {
-        // Set default to 30%
-        volumeSlider.value = 30;
-        currentVolume = 0.3;
-        volumeValue.textContent = '30%';
-        updateSliderTrack(30);
+        console.error('Volume slider not found!');
     }
 }
 
