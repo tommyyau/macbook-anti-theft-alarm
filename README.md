@@ -14,6 +14,10 @@ A simple but effective anti-theft alarm system for MacBooks that detects when so
 
 ### Option 1: Download DMG (Recommended)
 
+**Direct Download:**
+- [Download DMG File](https://github.com/tommyyau/macbook-anti-theft-alarm/raw/main/MacBook%20Anti-Theft%20Alarm-1.0.0-arm64.dmg) (89MB)
+
+**Or from Releases:**
 1. Go to the [Releases](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) page
 2. Download the latest `MacBook Anti-Theft Alarm-1.0.0-arm64.dmg` file
 3. Double-click the DMG file to mount it
