@@ -36,6 +36,25 @@
                 </button>
             </div>
 
+            <div class="volume-section">
+                <label for="volume-slider" class="volume-label">
+                    🔊 Alarm Volume: <span id="volume-value">30%</span>
+                </label>
+                <input 
+                    type="range" 
+                    id="volume-slider" 
+                    min="10" 
+                    max="100" 
+                    value="30" 
+                    class="volume-slider"
+                    title="Adjust alarm volume from 10% to 100%"
+                >
+                <div class="volume-labels">
+                    <span>10%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+
             <div class="instructions">
                 <h3>How it works:</h3>
                 <ol>

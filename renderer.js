@@ -10,6 +10,8 @@ const stopAlarmBtn = document.getElementById('stop-alarm-btn');
 const alarmSection = document.getElementById('alarm-section');
 const alarmReason = document.getElementById('alarm-reason');
 const alarmAudio = document.getElementById('alarm-audio');
+const volumeSlider = document.getElementById('volume-slider');
+const volumeValue = document.getElementById('volume-value');
 
 // Audio context for generating alarm sound
 let audioContext;
@@ -17,11 +19,15 @@ let oscillator;
 let gainNode;
 let isAlarmSoundPlaying = false;
 
+// Volume control
+let currentVolume = 0.3; // Default 30%
+
 // Initialize the app
 async function init() {
     await updateUI();
     setupEventListeners();
     setupAudio();
+    loadVolume(); // Load saved volume setting
 }
 
 // Set up event listeners
@@ -29,6 +35,10 @@ function setupEventListeners() {
     armBtn.addEventListener('click', armAlarm);
     disarmBtn.addEventListener('click', disarmAlarm);
     stopAlarmBtn.addEventListener('click', stopAlarm);
+    
+    // Volume slider event listener
+    volumeSlider.addEventListener('input', updateVolume);
+    volumeSlider.addEventListener('change', saveVolume);
     
     // Listen for alarm triggers from main process
     ipcRenderer.on('alarm-triggered', (event, reason) => {
@@ -127,6 +137,36 @@ function setupAudio() {
     }
 }
 
+// Update volume display and apply to current alarm if playing
+function updateVolume() {
+    const volumePercent = parseInt(volumeSlider.value);
+    currentVolume = volumePercent / 100; // Convert to 0-1 range
+    volumeValue.textContent = volumePercent + '%';
+    
+    // Update gain if alarm is currently playing
+    if (gainNode && isAlarmSoundPlaying) {
+        gainNode.gain.setValueAtTime(currentVolume, audioContext.currentTime);
+    }
+}
+
+// Save volume setting to localStorage
+function saveVolume() {
+    const volumePercent = parseInt(volumeSlider.value);
+    localStorage.setItem('alarmVolume', volumePercent.toString());
+    showNotification(`🔊 Volume set to ${volumePercent}%`, 'info');
+}
+
+// Load volume setting from localStorage
+function loadVolume() {
+    const savedVolume = localStorage.getItem('alarmVolume');
+    if (savedVolume) {
+        const volumePercent = parseInt(savedVolume);
+        volumeSlider.value = volumePercent;
+        currentVolume = volumePercent / 100;
+        volumeValue.textContent = volumePercent + '%';
+    }
+}
+
 // Generate alarm sound using Web Audio API
 function playAlarmSound() {
     if (!audioContext || isAlarmSoundPlaying) return;
@@ -146,7 +186,7 @@ function playAlarmSound() {
         oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
         
         // Volume control (0.1 = 10%, 0.5 = 50%, 1.0 = 100%)
-        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(currentVolume, audioContext.currentTime);
         
         // Create siren effect
         const now = audioContext.currentTime;
