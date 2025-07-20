@@ -63,30 +63,27 @@ function createWindow() {
 function autoResizeWindow() {
   if (!mainWindow) return;
   
-  // Get the content size
+  // Get the content size with a simpler approach
   mainWindow.webContents.executeJavaScript(`
-    const body = document.body;
-    const html = document.documentElement;
-    const height = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
-    );
-    const width = Math.max(
-      body.scrollWidth,
-      body.offsetWidth,
-      html.clientWidth,
-      html.scrollWidth,
-      html.offsetWidth
-    );
-    { height: height + 50, width: width + 50 }; // Add padding
+    const container = document.querySelector('.container');
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      const computedStyle = window.getComputedStyle(container);
+      const height = rect.height + 
+        parseInt(computedStyle.marginTop) + 
+        parseInt(computedStyle.marginBottom) + 100; // Extra buffer
+      const width = rect.width + 
+        parseInt(computedStyle.marginLeft) + 
+        parseInt(computedStyle.marginRight) + 50; // Extra buffer
+      { height: height, width: width };
+    } else {
+      { height: 750, width: 500 }; // Fallback size
+    }
   `).then((size) => {
     if (size && size.height && size.width) {
-      // Ensure minimum size
-      const newHeight = Math.max(size.height, 600);
-      const newWidth = Math.max(size.width, 450);
+      // Ensure minimum size with more generous padding
+      const newHeight = Math.max(size.height, 700);
+      const newWidth = Math.max(size.width, 480);
       
       // Resize window to fit content
       mainWindow.setSize(newWidth, newHeight);
@@ -95,7 +92,10 @@ function autoResizeWindow() {
       mainWindow.center();
     }
   }).catch((error) => {
-    console.log('Auto-resize failed:', error);
+    console.log('Auto-resize failed, using default size:', error);
+    // Fallback to a larger default size
+    mainWindow.setSize(500, 750);
+    mainWindow.center();
   });
 }
 

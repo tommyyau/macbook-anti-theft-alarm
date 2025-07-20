@@ -148,9 +148,20 @@ function updateVolume() {
     currentVolume = volumePercent / 100; // Convert to 0-1 range
     volumeValue.textContent = volumePercent + '%';
     
+    // Update slider track color to show progress
+    updateSliderTrack(volumePercent);
+    
     // Update gain if alarm is currently playing
     if (gainNode && isAlarmSoundPlaying) {
         gainNode.gain.setValueAtTime(currentVolume, audioContext.currentTime);
+    }
+}
+
+// Update the slider track color to show volume progress
+function updateSliderTrack(volumePercent) {
+    const slider = document.getElementById('volume-slider');
+    if (slider) {
+        slider.style.background = `linear-gradient(to right, #3498db 0%, #3498db ${volumePercent}%, #ecf0f1 ${volumePercent}%, #ecf0f1 100%)`;
     }
 }
 
@@ -172,6 +183,10 @@ function loadVolume() {
         volumeSlider.value = volumePercent;
         currentVolume = volumePercent / 100;
         volumeValue.textContent = volumePercent + '%';
+        updateSliderTrack(volumePercent);
+    } else {
+        // Set default track color for 30%
+        updateSliderTrack(30);
     }
 }
 
