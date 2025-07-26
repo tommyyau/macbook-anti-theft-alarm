@@ -19,7 +19,7 @@ A simple but effective anti-theft alarm system for MacBooks with MacShield prote
 ### Option 1: Download DMG (Recommended)
 
 **Latest Release:**
-1. Download the latest DMG: **[MacShieldAlarm-1.0.0-arm64.dmg](MacShieldAlarm-1.0.0-arm64.dmg)** (96.8 MB)
+1. Download the latest DMG: **[MacShieldAlarm-1.0.1-arm64.dmg](MacShieldAlarm-1.0.1-arm64.dmg)** (96.8 MB)
 2. Follow the [Installation Guide](INSTALLATION.md) to handle the security warning
 3. Drag the app to your Applications folder
 
