@@ -1,6 +1,6 @@
 {
   "name": "macbook-anti-theft-alarm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MacShieldAlarm - Anti-theft alarm system for MacBooks with MacShield protection",
   "main": "main.js",
   "scripts": {

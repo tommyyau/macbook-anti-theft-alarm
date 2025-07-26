@@ -6,8 +6,10 @@ A simple but effective anti-theft alarm system for MacBooks with MacShield prote
 
 - **Lid Monitoring**: Instantly detects when your MacBook lid is closed
 - **Admin Protection**: Requires admin password to arm/disarm (prevents thieves from simply clicking "stop")
-- **Volume Control**: Adjustable alarm volume from 10% to 100%
+- **Volume Key Blocking**: Blocks hardware volume keys (F10, F11, F12) during alarm to prevent silencing
+- **Volume Control**: Adjustable alarm volume from 10% to 100% with protection during alarm
 - **System Integration**: Prevents system sleep while armed
+- **Volume Monitoring**: Continuously monitors and resets system volume if tampered with
 - **Clean UI**: Modern, intuitive interface with prominent emergency stop button
 
 ## 📦 Installation
@@ -55,14 +57,40 @@ npm run dev-build
 ## 🔐 Security Features
 
 - **Admin Authentication**: Both arming and disarming require your macOS admin password
+- **Volume Key Protection**: Hardware volume keys (F10, F11, F12) are blocked during alarm state
+- **Volume Tampering Prevention**: App volume slider is locked and system volume is monitored during alarm
 - **System Integration**: Uses macOS system commands to prevent sleep and monitor lid state
 - **Background Operation**: Continues monitoring even when the app is minimized
+
+## 🔊 Volume Protection System
+
+MacShieldAlarm includes a comprehensive volume protection system to prevent thieves from silencing the alarm:
+
+### **Hardware Volume Key Blocking**
+- **F10 (Mute)**: Blocked during alarm to prevent muting
+- **F11 (Volume Down)**: Blocked during alarm to prevent volume reduction
+- **F12 (Volume Up)**: Blocked during alarm to prevent volume manipulation
+
+### **App-Level Protection**
+- **Volume Slider**: Locked with visual indicator during alarm
+- **Volume Controls**: Disabled to prevent tampering through the app interface
+
+### **System-Level Monitoring**
+- **Continuous Monitoring**: Checks system volume every 100ms during alarm
+- **Automatic Reset**: Resets volume to alarm level if detected tampering
+- **Real-time Protection**: Prevents volume changes from any source
+
+### **Volume Key Restoration**
+- **Smart Restart**: App offers to restart to fully restore volume key functionality
+- **State Preservation**: Alarm state is maintained across restarts
+- **User Choice**: You can choose to restart immediately or later
 
 ## ⚠️ Important Notes
 
 - **macOS Gatekeeper**: When you first run the app, macOS may show a security warning. Click "Open Anyway" in System Preferences > Security & Privacy
 - **Admin Permissions**: The app requires admin privileges to prevent system sleep and monitor hardware
 - **Volume Control**: Adjust the alarm volume before arming to your preferred level
+- **Volume Key Restoration**: After disarming, volume keys may require an app restart to fully restore functionality (this is normal due to macOS security limitations)
 
 ## 🛠️ Development
 
@@ -101,6 +129,11 @@ MIT License - see LICENSE file for details
 - Check that system sleep prevention is active
 - Verify volume is not set to 0%
 
+**Volume keys not working after disarming?**
+- This is normal due to macOS security limitations
+- The app will offer to restart to fully restore volume key functionality
+- You can also manually restart the app to restore volume keys
+
 **Permission denied errors?**
 - The app needs admin access to monitor hardware and prevent sleep
 - Enter your password when prompted
@@ -111,7 +144,12 @@ The app will automatically check for updates. New releases will be available on 
 
 ## 📦 Current Release
 
-**MacShieldAlarm v1.0.0**
+**MacShieldAlarm v1.0.1**
+- ✅ **NEW**: Volume key blocking (F10, F11, F12) during alarm to prevent silencing
+- ✅ **NEW**: Volume slider protection with visual lock indicator during alarm
+- ✅ **NEW**: System volume monitoring and automatic reset if tampered with
+- ✅ **NEW**: App restart mechanism to fully restore volume key functionality
+- ✅ **NEW**: Enhanced user notifications for volume protection status
 - ✅ Fixed quit functionality with proper app lifecycle management
 - ✅ Updated icon design with rounded corners and MacShield branding
 - ✅ Enhanced security with admin password protection

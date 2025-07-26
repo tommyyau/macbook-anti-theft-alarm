@@ -22,6 +22,7 @@ let isAlarmSoundPlaying = false;
 
 // Volume control
 let currentVolume = 0.3; // Default 30%
+let volumeSliderLocked = false;
 
 // Initialize the app
 async function init() {
@@ -93,6 +94,85 @@ function setupEventListeners() {
         showNotification('✅ Alarm stopped and disarmed successfully', 'success');
     });
     
+    // Handle volume key protection events
+    ipcRenderer.on('volume-keys-protected', (event, keyCount) => {
+        if (keyCount > 0) {
+            showNotification(`🔇 Volume keys protected - ${keyCount} hardware keys blocked during alarm`, 'info');
+        }
+    });
+    
+    // Handle state restoration after app restart
+    ipcRenderer.on('state-restored', (event, state) => {
+        console.log('📂 State restored from restart:', state);
+        updateUI();
+        if (state.triggered) {
+            showAlarmTriggered('Alarm restored from restart');
+        }
+        showNotification('🔄 App restarted - volume keys are now fully functional', 'success');
+    });
+    
+    ipcRenderer.on('volume-keys-restored', (event, success, restoredKeys, totalKeys) => {
+        if (success) {
+            showNotification(`✅ Volume keys restored successfully (${restoredKeys}/${totalKeys} keys)`, 'success');
+        } else {
+            showNotification('⚠️ Volume key restoration used emergency fallback - keys should work normally', 'warning');
+        }
+    });
+    
+    ipcRenderer.on('volume-restoration-verified', (event, success, stillRegistered) => {
+        if (success) {
+            showNotification('✅ Volume key restoration verified - all functions normal', 'success');
+        } else {
+            showNotification(`⚠️ Some volume keys may still be affected: ${stillRegistered.join(', ')}`, 'warning');
+        }
+    });
+    
+    ipcRenderer.on('volume-restoration-warning', () => {
+        showNotification('⚠️ Emergency volume key restoration applied - please test F10/F11/F12 keys', 'warning');
+    });
+    
+    ipcRenderer.on('volume-restoration-failed', () => {
+        showNotification('❌ Volume key restoration failed - you may need to restart your Mac', 'error');
+    });
+    
+    // New multi-tier restoration events
+    ipcRenderer.on('volume-restoration-progress', (event, tierInfo) => {
+        if (tierInfo.includes('Testing volume key functionality')) {
+            showNotification(`🧪 ${tierInfo}`, 'info');
+        } else if (tierInfo.includes('Volume key functionality verified')) {
+            showNotification(`✅ ${tierInfo}`, 'success');
+        } else if (tierInfo.includes('Resetting Core Audio daemon')) {
+            showNotification(`🔊 ${tierInfo}`, 'warning');
+        } else {
+            showNotification(`🔄 Volume restoration: ${tierInfo}`, 'info');
+        }
+    });
+    
+    ipcRenderer.on('volume-restoration-success', (event, method) => {
+        if (method.includes('verified')) {
+            showNotification(`🎉 Volume keys fully restored and verified!`, 'success');
+        } else {
+            showNotification(`✅ Volume keys fully restored via ${method}`, 'success');
+        }
+    });
+    
+    ipcRenderer.on('volume-restoration-guidance', (event, instructions) => {
+        // Show a more detailed modal or notification for user guidance
+        showUserGuidanceModal(instructions);
+    });
+    
+    ipcRenderer.on('volume-key-blocked', (event, keyName) => {
+        showNotification(`🔒 ${keyName} blocked - Admin password required to change volume`, 'warning');
+    });
+    
+    ipcRenderer.on('volume-key-blocking-failed', () => {
+        showNotification('⚠️ Could not protect all volume keys - app volume still protected', 'warning');
+    });
+    
+    ipcRenderer.on('system-volume-protected', (event, oldVolume, newVolume) => {
+        showNotification(`🚨 VOLUME TAMPERING BLOCKED! Reset from ${oldVolume}% to ${newVolume}%`, 'error');
+    });
+    
     // Handle keyboard shortcuts
     document.addEventListener('keydown', (event) => {
         // Prevent common bypass attempts when alarm is armed or triggered
@@ -148,6 +228,15 @@ function setupAudio() {
 
 // Update volume display and apply to current alarm if playing
 function updateVolume() {
+    // Block volume changes if slider is locked during alarm
+    if (volumeSliderLocked) {
+        showNotification('🔒 Volume locked during alarm - Admin password required to change', 'warning');
+        // Reset slider to current volume
+        volumeSlider.value = Math.round(currentVolume * 100);
+        updateSliderTrack(Math.round(currentVolume * 100));
+        return;
+    }
+    
     const volumePercent = parseInt(volumeSlider.value);
     currentVolume = volumePercent / 100; // Convert to 0-1 range
     volumeValue.textContent = volumePercent + '%';
@@ -227,6 +316,46 @@ function loadVolume() {
     } else {
         console.error('Volume slider not found!');
     }
+}
+
+// Lock volume slider during alarm
+function lockVolumeSlider() {
+    volumeSliderLocked = true;
+    const slider = document.getElementById('volume-slider');
+    const volumeLabel = document.querySelector('.volume-label');
+    
+    if (slider) {
+        slider.disabled = true;
+        slider.style.opacity = '0.5';
+        slider.style.cursor = 'not-allowed';
+        slider.title = 'Volume locked during alarm - Admin password required';
+    }
+    
+    if (volumeLabel) {
+        volumeLabel.innerHTML = '🔒 Alarm Volume: <span id="volume-value">' + Math.round(currentVolume * 100) + '%</span> (Protected)';
+    }
+    
+    console.log('🔒 Volume slider locked');
+}
+
+// Unlock volume slider after alarm is stopped
+function unlockVolumeSlider() {
+    volumeSliderLocked = false;
+    const slider = document.getElementById('volume-slider');
+    const volumeLabel = document.querySelector('.volume-label');
+    
+    if (slider) {
+        slider.disabled = false;
+        slider.style.opacity = '1';
+        slider.style.cursor = 'pointer';
+        slider.title = 'Adjust alarm volume from 10% to 100%';
+    }
+    
+    if (volumeLabel) {
+        volumeLabel.innerHTML = '🔊 Alarm Volume: <span id="volume-value">' + Math.round(currentVolume * 100) + '%</span>';
+    }
+    
+    console.log('🔊 Volume slider unlocked');
 }
 
 // Generate alarm sound using Web Audio API
@@ -384,6 +513,9 @@ function showAlarmTriggered(reason) {
     alarmSection.style.display = 'flex';
     playAlarmSound();
     
+    // Lock volume slider to prevent tampering
+    lockVolumeSlider();
+    
     // Flash the screen
     document.body.style.animation = 'none';
     setTimeout(() => {
@@ -396,6 +528,9 @@ function hideAlarmTriggered() {
     alarmSection.style.display = 'none';
     document.body.style.animation = 'none';
     stopAlarmSound(); // Stop sound only when hiding the alarm
+    
+    // Unlock volume slider after successful authentication
+    unlockVolumeSlider();
 }
 
 // Show notification
@@ -452,6 +587,129 @@ function showNotification(message, type = 'info') {
             }
         }, 300);
     }, 3000);
+}
+
+// Show detailed user guidance modal for volume key restoration
+function showUserGuidanceModal(instructions) {
+    // Remove any existing guidance modal
+    const existingModal = document.getElementById('guidance-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Create modal overlay
+    const modal = document.createElement('div');
+    modal.id = 'guidance-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    `;
+    
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        text-align: center;
+    `;
+    
+    // Add title
+    const title = document.createElement('h2');
+    title.textContent = instructions.title;
+    title.style.cssText = `
+        margin: 0 0 20px 0;
+        color: #2c3e50;
+        font-size: 24px;
+    `;
+    
+    // Add message
+    const message = document.createElement('p');
+    message.textContent = instructions.message;
+    message.style.cssText = `
+        margin: 0 0 20px 0;
+        color: #34495e;
+        font-size: 16px;
+        line-height: 1.5;
+    `;
+    
+    // Add steps list
+    const stepsList = document.createElement('ol');
+    stepsList.style.cssText = `
+        text-align: left;
+        margin: 20px 0;
+        padding-left: 20px;
+        color: #2c3e50;
+    `;
+    
+    instructions.steps.forEach(step => {
+        const listItem = document.createElement('li');
+        listItem.textContent = step;
+        listItem.style.cssText = `
+            margin: 10px 0;
+            font-size: 14px;
+            line-height: 1.4;
+        `;
+        stepsList.appendChild(listItem);
+    });
+    
+    // Add close button
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'I Understand';
+    closeButton.style.cssText = `
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 30px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background 0.2s ease;
+    `;
+    
+    closeButton.addEventListener('click', () => {
+        modal.remove();
+        showNotification('📋 Please test your volume keys (F10/F11/F12)', 'info');
+    });
+    
+    closeButton.addEventListener('mouseenter', () => {
+        closeButton.style.background = '#2980b9';
+    });
+    
+    closeButton.addEventListener('mouseleave', () => {
+        closeButton.style.background = '#3498db';
+    });
+    
+    // Assemble modal
+    modalContent.appendChild(title);
+    modalContent.appendChild(message);
+    modalContent.appendChild(stepsList);
+    modalContent.appendChild(closeButton);
+    modal.appendChild(modalContent);
+    
+    // Add to page
+    document.body.appendChild(modal);
+    
+    // Auto-remove after 30 seconds if user doesn't interact
+    setTimeout(() => {
+        if (document.getElementById('guidance-modal')) {
+            modal.remove();
+            showNotification('⏰ Volume key guidance closed automatically', 'info');
+        }
+    }, 30000);
 }
 
 // Initialize when page loads
