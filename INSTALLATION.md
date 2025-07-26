@@ -4,7 +4,7 @@
 
 ### Option 1: Install from GitHub Release (Recommended)
 
-1. **Download the DMG**: Go to the [Releases page](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) and download the latest `.dmg` file, or download directly: **[MacShieldAlarm-1.0.0-arm64.dmg](MacShieldAlarm-1.0.0-arm64.dmg)** (96.8 MB)
+1. **Download the DMG**: Go to the [Releases page](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) and download the latest `.dmg` file, or download directly: **[MacShieldAlarm-1.0.1-arm64.dmg](MacShieldAlarm-1.0.1-arm64.dmg)** (96.8 MB)
 
 2. **Handle "Corrupt" DMG Warning**: When you try to open the DMG, macOS may show a warning that the app is "corrupt" or "damaged". This is normal for unsigned apps. Here's how to fix it:
 

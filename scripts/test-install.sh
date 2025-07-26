@@ -5,9 +5,9 @@ echo "================================================"
 echo ""
 
 # Check if DMG exists
-if [ -f "dist/MacShieldAlarm-1.0.0-arm64.dmg" ]; then
-  echo "✅ DMG file found: dist/MacShieldAlarm-1.0.0-arm64.dmg"
-  echo "📏 File size: $(du -h "dist/MacShieldAlarm-1.0.0-arm64.dmg" | cut -f1)"
+if [ -f "dist/MacShieldAlarm-1.0.1-arm64.dmg" ]; then
+  echo "✅ DMG file found: dist/MacShieldAlarm-1.0.1-arm64.dmg"
+  echo "📏 File size: $(du -h "dist/MacShieldAlarm-1.0.1-arm64.dmg" | cut -f1)"
     echo ""
     
     echo "📋 Installation Instructions:"

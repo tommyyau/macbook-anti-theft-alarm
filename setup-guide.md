@@ -147,4 +147,4 @@ MIT License - Use freely for personal and commercial projects.
 
 ---
 
-**Version 1.0.0** | Built with Electron | Made for macOS, Windows, and Linux
+**Version 1.0.1** | Built with Electron | Made for macOS, Windows, and Linux
