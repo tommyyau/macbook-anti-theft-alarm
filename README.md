@@ -14,14 +14,50 @@ A simple but effective anti-theft alarm system for MacBooks with MacShield prote
 
 ## 📦 Installation
 
-**⚠️ Important**: Due to macOS security features, you may see a "corrupt" or "damaged" warning when installing. This is normal for unsigned apps. See the [Installation Guide](INSTALLATION.md) for detailed instructions on how to handle this.
+**⚠️ Important**: Due to macOS security features, you will encounter security warnings when installing. This is normal for unsigned apps and requires a few extra steps to install safely.
 
 ### Option 1: Download DMG (Recommended)
 
 **Latest Release:**
 1. Download the latest DMG: **[MacShieldAlarm-1.0.1-arm64.dmg](MacShieldAlarm-1.0.1-arm64.dmg)** (96.8 MB)
-2. Follow the [Installation Guide](INSTALLATION.md) to handle the security warning
-3. Drag the app to your Applications folder
+2. **Handle Security Warnings** (see detailed steps below)
+3. **Enable Accessibility Permissions** (required for volume key blocking)
+4. Drag the app to your Applications folder
+
+#### 🔒 **Handling macOS Security Warnings**
+
+**Why this happens:** macOS protects users from unsigned apps (apps without an Apple Developer certificate). Since this is an open-source project without code signing, macOS will initially block it.
+
+**If you see "MacShieldAlarm is damaged":**
+1. **Don't click "Move to Bin"** - click **Cancel**
+2. Open Terminal and run: 
+   ```bash
+   xattr -c /Applications/MacShieldAlarm.app
+   ```
+3. This removes the quarantine flag that macOS adds to downloaded files
+
+**If you see "Can't be opened" with an "Open Anyway" option:**
+1. **Right-click** on MacShieldAlarm in Applications folder
+2. Select **"Open"** from the context menu
+3. Click **"Open"** when prompted
+
+#### 🔑 **Enable Accessibility Permissions**
+
+MacShieldAlarm requires Accessibility permissions to block volume keys during alarm:
+
+1. Go to **System Preferences** → **Security & Privacy** → **Privacy** → **Accessibility**
+2. Click the **lock icon** and enter your password
+3. Find **MacShieldAlarm** in the list and **enable** it
+4. If MacShieldAlarm isn't listed, click **+** and add it from Applications
+
+**Why needed:** This allows the app to intercept system-wide volume key presses (F10, F11, F12) to prevent thieves from silencing the alarm.
+
+#### 🛡️ **Security Concerns?**
+
+If you don't trust the pre-built DMG file:
+- **Review the source code** in this repository
+- **Build it yourself** using the instructions below
+- All code is open source and auditable
 
 **From GitHub Releases:**
 1. Go to the [Releases](https://github.com/tommyyau/macbook-anti-theft-alarm/releases) page
@@ -29,7 +65,9 @@ A simple but effective anti-theft alarm system for MacBooks with MacShield prote
 3. Follow the [Installation Guide](INSTALLATION.md) to handle the security warning
 4. Drag the app to your Applications folder
 
-### Option 2: Build from Source
+### Option 2: Build from Source (Most Secure)
+
+If you prefer to build the app yourself for maximum security:
 
 ```bash
 # Clone the repository
@@ -39,12 +77,17 @@ cd macbook-anti-theft-alarm
 # Install dependencies
 npm install
 
-# Run the app
+# Run the app in development mode
 npm start
 
-# Build DMG (optional)
-npm run dev-build
+# Build your own DMG
+npm run build-dmg
 ```
+
+**Benefits of building from source:**
+- No security warnings (since you built it yourself)
+- Complete transparency of what's in the app
+- No need for `xattr` commands or security bypasses
 
 ## 🚀 Usage
 
@@ -87,7 +130,8 @@ MacShieldAlarm includes a comprehensive volume protection system to prevent thie
 
 ## ⚠️ Important Notes
 
-- **macOS Gatekeeper**: When you first run the app, macOS may show a security warning. Click "Open Anyway" in System Preferences > Security & Privacy
+- **Security Warnings**: Follow the installation steps above to handle macOS security warnings for unsigned apps
+- **Accessibility Permissions**: Required for volume key blocking - enable in System Preferences > Security & Privacy > Privacy > Accessibility
 - **Admin Permissions**: The app requires admin privileges to prevent system sleep and monitor hardware
 - **Volume Control**: Adjust the alarm volume before arming to your preferred level
 - **Volume Key Restoration**: After disarming, volume keys may require an app restart to fully restore functionality (this is normal due to macOS security limitations)
