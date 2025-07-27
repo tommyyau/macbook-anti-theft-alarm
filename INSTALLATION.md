@@ -14,7 +14,12 @@
    - Click "Open" in the security dialog that appears
    - The app will now run normally
 
-   **Method B - System Preferences:**
+   **Method B - Terminal Command:**
+   ```bash
+   xattr -c /Applications/MacShieldAlarm.app
+   ```
+
+   **Method C - System Preferences:**
    - Go to System Preferences > Security & Privacy
    - Click the "General" tab
    - Look for a message about the blocked app
