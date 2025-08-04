@@ -19,7 +19,7 @@ A simple but effective anti-theft alarm system for MacBooks with MacShield prote
 ### Option 1: Download DMG (Recommended)
 
 **Latest Release:**
-1. Download the latest DMG: **[MacShieldAlarm-1.0.1-arm64.dmg](MacShieldAlarm-1.0.1-arm64.dmg)** (96.8 MB)
+1. Download the latest DMG: **[MacShieldAlarm-1.0.2-arm64.dmg](MacShieldAlarm-1.0.2-arm64.dmg)** (92 MB)
 2. **Handle Security Warnings** (see detailed steps below)
 3. **Enable Accessibility Permissions** (required for volume key blocking)
 4. Drag the app to your Applications folder
@@ -188,7 +188,11 @@ The app will automatically check for updates. New releases will be available on 
 
 ## 📦 Current Release
 
-**MacShieldAlarm v1.0.1**
+**MacShieldAlarm v1.0.2**
+- ✅ **NEW**: Volume settings now persist between app sessions
+- ✅ **FIXED**: Alarm now sounds at user-selected volume instead of defaulting to 30%
+
+**Previous Release (v1.0.1)**
 - ✅ **NEW**: Volume key blocking (F10, F11, F12) during alarm to prevent silencing
 - ✅ **NEW**: Volume slider protection with visual lock indicator during alarm
 - ✅ **NEW**: System volume monitoring and automatic reset if tampered with

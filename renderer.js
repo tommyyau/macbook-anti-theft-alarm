@@ -289,13 +289,11 @@ function saveVolume() {
 
 // Load volume setting from localStorage
 function loadVolume() {
-    // Clear any existing localStorage to ensure clean start
-    localStorage.removeItem('alarmVolume');
+    // Load saved volume from localStorage, default to 30% if not found
+    const savedVolume = localStorage.getItem('alarmVolume');
+    const volumePercent = savedVolume ? parseInt(savedVolume) : 30;
     
-    // Always start with 30% for now
-    const volumePercent = 30;
-    
-    // Force set the slider value and ensure it's properly initialized
+    // Set the slider value and ensure it's properly initialized
     if (volumeSlider) {
         // Set the slider value first
         volumeSlider.value = volumePercent;
@@ -311,7 +309,7 @@ function loadVolume() {
             updateSliderTrack(volumePercent);
         }, 50);
         
-        console.log('Volume initialized to:', volumePercent + '%');
+        console.log('Volume initialized to:', volumePercent + '%' + (savedVolume ? ' (from saved settings)' : ' (default)'));
         console.log('Slider value set to:', volumeSlider.value);
     } else {
         console.error('Volume slider not found!');
